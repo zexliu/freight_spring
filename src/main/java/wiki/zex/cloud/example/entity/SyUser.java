@@ -2,13 +2,12 @@ package wiki.zex.cloud.example.entity;
 
 import com.alibaba.excel.annotation.ExcelIgnore;
 import com.alibaba.excel.annotation.ExcelProperty;
-import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.*;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
 
-import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.annotations.ApiModel;
@@ -83,6 +82,7 @@ public class SyUser implements Serializable {
 
     @ApiModelProperty(value = "创建时间")
     @ExcelIgnore
+    @TableField(updateStrategy= FieldStrategy.IGNORED)
     private LocalDateTime createAt;
 
     @ApiModelProperty(value = "最后登录时间")
