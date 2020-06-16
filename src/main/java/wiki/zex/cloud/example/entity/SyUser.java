@@ -82,7 +82,6 @@ public class SyUser implements Serializable {
 
     @ApiModelProperty(value = "创建时间")
     @ExcelIgnore
-    @TableField(updateStrategy= FieldStrategy.IGNORED)
     private LocalDateTime createAt;
 
     @ApiModelProperty(value = "最后登录时间")
@@ -95,6 +94,7 @@ public class SyUser implements Serializable {
 
     @ExcelIgnore
     @ApiModelProperty(value = "过期时间")
+    @TableField(updateStrategy= FieldStrategy.IGNORED)
     private LocalDateTime expireAt;
 
     @ApiModelProperty(value = "可用状态")
