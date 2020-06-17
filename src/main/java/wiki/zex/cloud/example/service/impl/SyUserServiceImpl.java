@@ -11,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import wiki.zex.cloud.example.entity.SyUser;
+import wiki.zex.cloud.example.exception.ParameterException;
 import wiki.zex.cloud.example.mapper.SyUserMapper;
 import wiki.zex.cloud.example.req.SyUserReq;
 import wiki.zex.cloud.example.resp.SyUserResp;
@@ -23,6 +25,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import wiki.zex.cloud.example.utils.ExcelUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
@@ -125,9 +128,12 @@ public class SyUserServiceImpl extends ServiceImpl<SyUserMapper, SyUser> impleme
     }
 
 
+
+
     @Override
     @Transactional
-    public void upload(MultipartFile file) {
+    public void upload(MultipartFile file , HttpServletRequest request) {
+
         ExcelUtils.read(SyUser.class, file, new AnalysisEventListener<SyUser>() {
 
             private List<SyUser> list = new ArrayList<>();

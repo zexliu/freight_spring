@@ -19,7 +19,7 @@ import static com.baomidou.mybatisplus.annotation.IdType.ASSIGN_ID;
 // 演示例子，执行 main 方法控制台输入模块表名回车自动生成对应项目目录中
 public class CodeGenerator {
 
-    public static final String DATA_SOURCE_URL = "jdbc:mysql://localhost:3306/example?useUnicode=true&useSSL=false&characterEncoding=utf8";
+    public static final String DATA_SOURCE_URL = "jdbc:mysql://localhost:3306/crew?useUnicode=true&useSSL=false&characterEncoding=utf8";
     public static final String DATA_SOURCE_USERNAME = "root";
     public static final String DATA_SOURCE_PASSWORD = "123456";
     /**

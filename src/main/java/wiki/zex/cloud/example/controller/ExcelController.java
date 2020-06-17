@@ -9,8 +9,11 @@ import wiki.zex.cloud.example.resp.SimpleResp;
 import wiki.zex.cloud.example.service.IExcelService;
 import wiki.zex.cloud.example.utils.ExcelUtils;
 import wiki.zex.cloud.example.utils.SpringUtil;
+
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/excel")
@@ -23,8 +26,8 @@ public class ExcelController {
     }
 
     @PostMapping("upload")
-    public SimpleResp upload(@RequestParam String name,MultipartFile file) throws IOException {
-        ((IExcelService)SpringUtil.getBean(name+"ServiceImpl")).upload(file);
+    public SimpleResp upload(@RequestParam String name, @RequestPart MultipartFile file, HttpServletRequest request) throws IOException {
+        ((IExcelService)SpringUtil.getBean(name+"ServiceImpl")).upload(file,request);
         return SimpleResp.SUCCESS;
     }
 

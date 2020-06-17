@@ -74,7 +74,8 @@ public class SyMenuServiceImpl extends ServiceImpl<SyMenuMapper, SyMenu> impleme
 
     @Override
     public List<SyMenuTree> tree(Authentication authentication) {
-        List<SyMenu> list = baseMapper.getListByUserId(((MyUserDetails)authentication.getPrincipal()).getId());
+        MyUserDetails userDetails = (MyUserDetails) authentication.getPrincipal();
+        List<SyMenu> list = baseMapper.getListByUserId(userDetails.getId());
         return listToTree(list);
     }
 

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="wiki.zex.cloud.example.mapper.QaDriverQuestionPagerMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="wiki.zex.cloud.example.entity.QaDriverQuestionPager">
+        <id column="id" property="id" />
+        <result column="template_id" property="templateId" />
+        <result column="question_store_id" property="questionStoreId" />
+        <result column="total_score" property="totalScore" />
+        <result column="question_count" property="questionCount" />
+        <result column="time_duration" property="timeDuration" />
+        <result column="create_at" property="createAt" />
+        <result column="submit_at" property="submitAt" />
+        <result column="driver_score" property="driverScore" />
+    </resultMap>
+
+</mapper>

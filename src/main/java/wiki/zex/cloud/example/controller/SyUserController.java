@@ -1,11 +1,9 @@
 package wiki.zex.cloud.example.controller;
 
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.commons.lang3.StringUtils;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -37,6 +35,7 @@ public class SyUserController {
 
     @Autowired
     private ISyUserService iSyUserService;
+
 
     @GetMapping
     @ApiOperation("分页查询")
