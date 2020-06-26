@@ -51,6 +51,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                     }
                 })
 
+                .antMatchers("/api/v1/captcha/**").permitAll()
                 .antMatchers("/files/**").permitAll()
                 .antMatchers("/actuator/**").permitAll()
                 .anyRequest()//任何请求
