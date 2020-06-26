@@ -14,15 +14,15 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.A
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.CompositeTokenGranter;
+import org.springframework.security.oauth2.provider.TokenGranter;
 import org.springframework.security.oauth2.provider.token.*;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 import wiki.zex.cloud.example.entity.SyUser;
+import wiki.zex.cloud.example.security.CaptchaTokenGranter;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 认证服务器配置
@@ -39,6 +39,12 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     @Autowired
     private AuthenticationManager authenticationManager;
+
+    private TokenGranter tokenGranter(final AuthorizationServerEndpointsConfigurer endpoints) {
+        List<TokenGranter> granters = new ArrayList<TokenGranter>(Collections.singletonList(endpoints.getTokenGranter()));// 获取默认的granter集合
+        granters.add(new CaptchaTokenGranter(authenticationManager,endpoints.getTokenServices(), endpoints.getClientDetailsService(), endpoints.getOAuth2RequestFactory()));
+        return new CompositeTokenGranter(granters);
+    }
 
 
     @Bean
@@ -71,6 +77,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
 
 
+
     /**
      * 配置令牌端点的约束
      *
@@ -81,7 +88,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
         security.allowFormAuthenticationForClients();
     }
-
     /**
      * 配置客户端信息
      *
@@ -94,7 +100,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .secret(passwordEncoder.encode("secret"))
                 .refreshTokenValiditySeconds(3600 * 30)
                 .accessTokenValiditySeconds(600)
-                .authorizedGrantTypes("password", "refresh_token")
+                .authorizedGrantTypes("password", "refresh_token","captcha")
                 .scopes("all");
         super.configure(clients);
     }
@@ -112,10 +118,10 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         tokenEnhancers.add(tokenEnhancer());
         tokenEnhancers.add(jwtAccessTokenConverter());
         tokenEnhancerChain.setTokenEnhancers(tokenEnhancers);
-
         endpoints.allowedTokenEndpointRequestMethods(HttpMethod.POST)
                 .tokenStore(tokenStore())
                 .tokenEnhancer(tokenEnhancerChain)
+                .tokenGranter((tokenGranter(endpoints)))
                 .authenticationManager(authenticationManager)
         .userDetailsService(userDetailsService);
         super.configure(endpoints);

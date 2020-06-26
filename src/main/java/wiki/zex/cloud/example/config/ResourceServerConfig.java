@@ -3,27 +3,18 @@ package wiki.zex.cloud.example.config;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.config.annotation.ObjectPostProcessor;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
-import org.springframework.security.web.AuthenticationEntryPoint;
-import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.web.cors.CorsUtils;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import wiki.zex.cloud.example.security.CaptchaAuthenticationProvider;
 import wiki.zex.cloud.example.security.MyAccessDecisionManager;
 import wiki.zex.cloud.example.security.MyAccessDeniedHandler;
 import wiki.zex.cloud.example.security.MyFilterInvocationSecurityMetadataSource;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 @EnableResourceServer
 @Configuration
@@ -41,12 +32,12 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     private MyAccessDeniedHandler myAccessDeniedHandler;
     @Override
     public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
-//
         super.configure(resources);
     }
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
+
         http
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
@@ -66,4 +57,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                 .authenticated()
                 .and().exceptionHandling().accessDeniedHandler(myAccessDeniedHandler);//都需要身份认证
     }
+
+
+
 }

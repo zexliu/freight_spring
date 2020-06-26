@@ -49,7 +49,7 @@ public class MyUserDetails extends SyUser implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return !getLocked();
+        return getLocked() == null || !getLocked();
     }
 
     @Override
@@ -63,6 +63,6 @@ public class MyUserDetails extends SyUser implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return getEnable();
+        return getEnable() == null || getEnable() ;
     }
 }

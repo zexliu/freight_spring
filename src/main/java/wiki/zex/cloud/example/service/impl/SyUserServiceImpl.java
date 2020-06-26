@@ -6,8 +6,11 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -44,6 +47,7 @@ public class SyUserServiceImpl extends ServiceImpl<SyUserMapper, SyUser> impleme
 
 
     @Autowired
+    @Lazy
     private PasswordEncoder passwordEncoder;
 
     @Autowired
@@ -63,7 +67,9 @@ public class SyUserServiceImpl extends ServiceImpl<SyUserMapper, SyUser> impleme
 //        valid(req, null);
         SyUser syUser = new SyUser();
         BeanUtils.copyProperties(req, syUser);
-        passwordEncoder.encode(req.getPassword());
+        if (StringUtils.isNotBlank(req.getPassword())){
+            passwordEncoder.encode(req.getPassword());
+        }
         save(syUser);
 
         return syUser;
@@ -115,6 +121,11 @@ public class SyUserServiceImpl extends ServiceImpl<SyUserMapper, SyUser> impleme
     @Override
     public IPage<SyUser> list(Page<SyUser> page, String username, String mobile, String realName, String workNo, Long deptId, Boolean enable, Boolean locked) {
         return baseMapper.list(page,username,mobile,realName,workNo,deptId,enable,locked);
+    }
+
+    @Override
+    public SyUser findByMobile(String mobile) {
+        return getOne(new LambdaQueryWrapper<SyUser>().eq(SyUser::getMobile, mobile));
     }
 
 
