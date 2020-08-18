@@ -2,10 +2,10 @@ package wiki.zex.cloud.example.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.springframework.security.core.userdetails.UserDetails;
 import wiki.zex.cloud.example.entity.SyUser;
 import com.baomidou.mybatisplus.extension.service.IService;
 import wiki.zex.cloud.example.req.SyUserReq;
+import wiki.zex.cloud.example.resp.SimpleDriverResp;
 import wiki.zex.cloud.example.resp.SyUserResp;
 
 /**
@@ -33,5 +33,9 @@ public interface ISyUserService extends IService<SyUser> {
     IPage<SyUser> list(Page<SyUser> convert, String username, String mobile, String realName, String workNo, Long deptId, Boolean enable, Boolean locked);
 
     SyUser findByMobile(String username);
+
+    Long getCount(String roleCode);
+
+    SimpleDriverResp drivers(Page<Object> convert, String mobile);
 
 }

@@ -8,12 +8,15 @@ import org.springframework.context.ApplicationContext;
 
 import org.springframework.context.ApplicationContextAware;
 
+import org.springframework.context.annotation.Lazy;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
- 
+
 
 @Component
-
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public class SpringUtil implements ApplicationContextAware {
 
     private static ApplicationContext applicationContext = null;

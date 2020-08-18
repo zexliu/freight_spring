@@ -21,6 +21,7 @@ import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenCo
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 import wiki.zex.cloud.example.entity.SyUser;
 import wiki.zex.cloud.example.security.CaptchaTokenGranter;
+import wiki.zex.cloud.example.security.MyUserAuthenticationConverter;
 
 import java.util.*;
 
@@ -42,7 +43,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     private TokenGranter tokenGranter(final AuthorizationServerEndpointsConfigurer endpoints) {
         List<TokenGranter> granters = new ArrayList<TokenGranter>(Collections.singletonList(endpoints.getTokenGranter()));// 获取默认的granter集合
-        granters.add(new CaptchaTokenGranter(authenticationManager,endpoints.getTokenServices(), endpoints.getClientDetailsService(), endpoints.getOAuth2RequestFactory()));
+        granters.add(new CaptchaTokenGranter(authenticationManager, endpoints.getTokenServices(), endpoints.getClientDetailsService(), endpoints.getOAuth2RequestFactory()));
         return new CompositeTokenGranter(granters);
     }
 
@@ -53,12 +54,12 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     }
 
     @Bean
-    public TokenEnhancer tokenEnhancer(){
+    public TokenEnhancer tokenEnhancer() {
         return (accessToken, authentication) -> {
             Map<String, Object> additionalInformation = new HashMap<>();
-            SyUser syUser = (SyUser)authentication.getPrincipal();
-            additionalInformation.put("userId",syUser.getId());
-            ((DefaultOAuth2AccessToken)accessToken).setAdditionalInformation(additionalInformation);
+            SyUser syUser = (SyUser) authentication.getPrincipal();
+            additionalInformation.put("userId", syUser.getId());
+            ((DefaultOAuth2AccessToken) accessToken).setAdditionalInformation(additionalInformation);
             return accessToken;
         };
     }
@@ -68,14 +69,12 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
         converter.setSigningKey("spring-example");
         DefaultAccessTokenConverter accessTokenConverter = new DefaultAccessTokenConverter();
-        DefaultUserAuthenticationConverter defaultUserAuthenticationConverter = new DefaultUserAuthenticationConverter();
-        defaultUserAuthenticationConverter.setUserDetailsService(userDetailsService);
-        accessTokenConverter.setUserTokenConverter(defaultUserAuthenticationConverter);
+        MyUserAuthenticationConverter myUserAuthenticationConverter = new MyUserAuthenticationConverter();
+        myUserAuthenticationConverter.setUserDetailsService(userDetailsService);
+        accessTokenConverter.setUserTokenConverter(myUserAuthenticationConverter);
         converter.setAccessTokenConverter(accessTokenConverter);
         return converter;
     }
-
-
 
 
     /**
@@ -88,6 +87,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
         security.allowFormAuthenticationForClients();
     }
+
     /**
      * 配置客户端信息
      *
@@ -99,8 +99,20 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         clients.inMemory().withClient("example_client")
                 .secret(passwordEncoder.encode("secret"))
                 .refreshTokenValiditySeconds(3600 * 30)
-                .accessTokenValiditySeconds(600)
-                .authorizedGrantTypes("password", "refresh_token","captcha")
+                .accessTokenValiditySeconds(3600)
+                .authorizedGrantTypes("password", "refresh_token", "captcha")
+                .scopes("all")
+                .and().withClient("master_client")
+                .secret(passwordEncoder.encode("secret"))
+                .refreshTokenValiditySeconds(3600 * 30)
+                .accessTokenValiditySeconds(3600)
+                .authorizedGrantTypes("password", "refresh_token", "captcha")
+                .scopes("all")
+                .and().withClient("driver_client")
+                .secret(passwordEncoder.encode("secret"))
+                .refreshTokenValiditySeconds(3600 * 30)
+                .accessTokenValiditySeconds(3600)
+                .authorizedGrantTypes("password", "refresh_token", "captcha")
                 .scopes("all");
         super.configure(clients);
     }
@@ -123,7 +135,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .tokenEnhancer(tokenEnhancerChain)
                 .tokenGranter((tokenGranter(endpoints)))
                 .authenticationManager(authenticationManager)
-        .userDetailsService(userDetailsService);
+                .userDetailsService(userDetailsService);
         super.configure(endpoints);
     }
 }

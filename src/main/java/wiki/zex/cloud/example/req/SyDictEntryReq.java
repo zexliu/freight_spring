@@ -10,17 +10,17 @@ public class SyDictEntryReq {
 
     @ApiModelProperty(value = "字典编码")
     @NotBlank
-    @Length(min = 2,max = 30)
+    @Length(min = 1,max = 30)
     private String dictCode;
 
     @ApiModelProperty(value = "字典项名称")
     @NotBlank
-    @Length(min = 2,max = 30)
+    @Length(min = 1,max = 30)
     private String dictEntryName;
 
     @ApiModelProperty(value = "字典项值")
     @NotBlank
-    @Length(min = 2,max = 30)
+    @Length(min = 1,max = 30)
     private String dictEntryValue;
 
     @ApiModelProperty(value = "描述")

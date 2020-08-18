@@ -1,11 +1,10 @@
 package wiki.zex.cloud.example.controller;
 
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.commons.lang3.StringUtils;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,9 +14,12 @@ import org.springframework.web.bind.annotation.*;
 import wiki.zex.cloud.example.entity.SyUser;
 import wiki.zex.cloud.example.req.Pageable;
 import wiki.zex.cloud.example.req.SyUserReq;
+import wiki.zex.cloud.example.resp.SimpleDriverResp;
 import wiki.zex.cloud.example.resp.SimpleResp;
 import wiki.zex.cloud.example.resp.SyUserResp;
+import wiki.zex.cloud.example.security.MyUserDetails;
 import wiki.zex.cloud.example.service.ISyUserService;
+
 import javax.validation.Valid;
 
 
@@ -40,8 +42,8 @@ public class SyUserController {
 
     @GetMapping
     @ApiOperation("分页查询")
-    IPage<SyUser> list(Pageable pageable, String username, String mobile, String realName, String workNo,Long deptId, Boolean enable, Boolean locked) {
-        return iSyUserService.list(pageable.convert(),username,mobile,realName,workNo,deptId,enable,locked);
+    IPage<SyUser> list(Pageable pageable, String username, String mobile, String realName, String workNo, Long deptId, Boolean enable, Boolean locked) {
+        return iSyUserService.list(pageable.convert(), username, mobile, realName, workNo, deptId, enable, locked);
 //        return iSyUserService.page(pageable.convert(), new LambdaQueryWrapper<SyUser>()
 //                .like(StringUtils.isNotBlank(username), SyUser::getUsername, username)
 //                .like(StringUtils.isNotBlank(mobile), SyUser::getMobile, mobile)
@@ -83,9 +85,34 @@ public class SyUserController {
 
     @PostMapping("/{id}/password")
     public SimpleResp password(@PathVariable Long id, @RequestParam @Length(min = 32, max = 32)
-        String password) {
-        iSyUserService.password(id,password);
+            String password) {
+        iSyUserService.password(id, password);
         return SimpleResp.SUCCESS;
     }
 
+
+    @GetMapping("/count")
+    public Long getCount(String roleCode) {
+        return iSyUserService.getCount(roleCode);
+    }
+
+
+    @GetMapping("/driver")
+    public SimpleDriverResp driver(Pageable pageable, String mobile) {
+        return iSyUserService.drivers(pageable.convert(), mobile);
+    }
+
+
+    @PutMapping("/push")
+    @PreAuthorize("isAuthenticated()")
+    public SimpleResp updatePush(@RequestParam String clientType, String clientId, String pushId, Authentication authentication) {
+        MyUserDetails m = (MyUserDetails) authentication.getPrincipal();
+        iSyUserService.update(new LambdaUpdateWrapper<SyUser>()
+                .set(clientType.equals("master"), SyUser::getMasterClientId, clientId)
+                .set(clientType.equals("master"), SyUser::getMasterPushId, pushId)
+                .set(clientType.equals("driver"), SyUser::getDriverClientId, clientId)
+                .set(clientType.equals("driver"), SyUser::getDriverPushId, pushId)
+                .eq(SyUser::getId, m.getId()));
+        return SimpleResp.SUCCESS;
+    }
 }

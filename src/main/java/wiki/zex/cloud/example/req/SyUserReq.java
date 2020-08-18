@@ -1,5 +1,6 @@
 package wiki.zex.cloud.example.req;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 import wiki.zex.cloud.example.enums.GenderType;
@@ -51,4 +52,9 @@ public class SyUserReq {
 
     private List<Long> deptIds;
 
+    private String national;
+
+    private String identityCard;
+
+    private String identityCardNo;
 }

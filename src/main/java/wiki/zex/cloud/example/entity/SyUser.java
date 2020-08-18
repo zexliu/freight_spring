@@ -105,6 +105,21 @@ public class SyUser implements Serializable {
     @ExcelIgnore
     private Boolean locked;
 
+    @ApiModelProperty(value = "民族")
+    private String national;
+
+    @ApiModelProperty(value = "身份证图片")
+    private String identityCard;
+
+    @ApiModelProperty(value = "身份证号码")
+    private String identityCardNo;
+
+
+
+    private String masterClientId;
+    private String masterPushId;
+    private String driverPushId;
+    private String driverClientId;
 
 
 

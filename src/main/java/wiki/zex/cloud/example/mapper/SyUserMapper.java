@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Param;
 import wiki.zex.cloud.example.entity.SyUser;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import wiki.zex.cloud.example.resp.SimpleDriverResp;
 
 /**
  * <p>
@@ -24,4 +25,9 @@ public interface SyUserMapper extends BaseMapper<SyUser> {
                        @Param("deptId")Long deptId,
                        @Param("enable")Boolean enable,
                        @Param("locked")Boolean locked);
+
+    Long count(@Param("roleCode") String roleCode);
+
+    SimpleDriverResp drivers(Page<Object> convert, @Param("mobile") String mobile);
+
 }

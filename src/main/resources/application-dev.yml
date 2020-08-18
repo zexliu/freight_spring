@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:p6spy:mysql://localhost:3306/example?useUnicode=yes&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
+    url: jdbc:p6spy:mysql://localhost:3306/freight?useUnicode=yes&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
     username: root
     password: 123456
     driver-class-name: com.p6spy.engine.spy.P6SpyDriver
@@ -31,6 +31,31 @@ spring:
       - .sql
     table: flyway_schema_history #使用的元数据表名
     validate-on-migrate: true #迁移时是否效验
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: root
+    password: 666666
+wechat:
+  mpAppId: wxd898xxxx
+  mchId: 1483xxxx
+  mchKey: C5245D70xxxxx
+  keyPath: /var/weixin_cert/wxpay.p12
+  notifyUrl: http://xxx.com/notify
+  miniAppId: wxxxxxxxxxxx6bf9b
+  miniAppSecret: xxbc6xxxxxxxxxxxxxx9c49d
+  appAppId: wxxxxxxxxxxxx43b0
+
+alipay:
+  appId: appId
+  privateKey: 商户私钥
+  aliPayPublicKey: 支付宝公钥
+  notifyUrl: http://xxx.com/notify
+  returnUrl: http://xxx.com/return
+  sandbox: true #是否使用沙箱
 
 files-location: /Users/zex/upload_files
-host-url: http://localhost:8080
+#host-url: http://192.168.110.188:8080
+host-url: http://192.168.31.79:8088
+server:
+  port: 8088

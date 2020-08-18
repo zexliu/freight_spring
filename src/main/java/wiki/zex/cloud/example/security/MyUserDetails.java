@@ -25,6 +25,8 @@ public class MyUserDetails extends SyUser implements UserDetails {
 
     private List<SyRoleResp> roles;
 
+    private String clientId;
+
     @Override
     @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -19,6 +19,8 @@ configurations {
 }
 
 repositories {
+    mavenLocal()
+    maven {url 'http://maven.aliyun.com/nexus/content/groups/public/'}
     mavenCentral()
 }
 
@@ -33,6 +35,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-aop'
     implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'org.springframework.boot:spring-boot-starter-amqp'
 //    implementation 'org.springframework.cloud:spring-cloud-starter-security'
     implementation 'org.springframework.cloud:spring-cloud-starter-oauth2'
 
@@ -77,6 +80,9 @@ dependencies {
     implementation 'io.swagger:swagger-annotations:1.6.0'
     implementation 'io.swagger:swagger-models:1.6.0'
     implementation 'com.github.xiaoymin:swagger-bootstrap-ui:1.9.6'
+    implementation 'cn.springboot:best-pay-sdk:1.3.3'
+    implementation 'com.mob.push.sdk:mobpush-websdkv3-java:1.0.0'
+
 }
 
 dependencyManagement {

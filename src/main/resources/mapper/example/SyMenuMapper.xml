@@ -38,7 +38,9 @@
 
         WHERE surr.user_id = #{userId}
 
-        GROUP BY menu_id
+        GROUP BY sm.id ,sm.seq
+
+        order by sm.seq desc
 
     </select>
     <select id="getByRoleId" resultType="wiki.zex.cloud.example.entity.SyMenu">

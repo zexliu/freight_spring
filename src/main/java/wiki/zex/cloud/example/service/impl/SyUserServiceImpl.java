@@ -10,13 +10,13 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import wiki.zex.cloud.example.entity.SyUser;
 import wiki.zex.cloud.example.mapper.SyUserMapper;
 import wiki.zex.cloud.example.req.SyUserReq;
+import wiki.zex.cloud.example.resp.SimpleDriverResp;
 import wiki.zex.cloud.example.resp.SyUserResp;
 import wiki.zex.cloud.example.service.IExcelService;
 import wiki.zex.cloud.example.service.ISyUserDeptRelService;
@@ -126,6 +126,16 @@ public class SyUserServiceImpl extends ServiceImpl<SyUserMapper, SyUser> impleme
     @Override
     public SyUser findByMobile(String mobile) {
         return getOne(new LambdaQueryWrapper<SyUser>().eq(SyUser::getMobile, mobile));
+    }
+
+    @Override
+    public Long getCount(String roleCode) {
+        return baseMapper.count(roleCode);
+    }
+
+    @Override
+    public SimpleDriverResp drivers(Page<Object> convert, String mobile) {
+        return baseMapper.drivers(convert,mobile);
     }
 
 

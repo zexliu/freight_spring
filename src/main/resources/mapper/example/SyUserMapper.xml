@@ -42,7 +42,7 @@
         su.create_at
         from sy_user su
         left join sy_user_dept_rel sudr on sudr.user_id = su.id
-        left join  sy_user_role_rel surr on surr.user_id = su.id
+        left join sy_user_role_rel surr on surr.user_id = su.id
         <where>
             1=1
             <if test="username != null">
@@ -68,6 +68,31 @@
             </if>
         </where>
         group by su.id
+    </select>
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from sy_user su
+                 left join sy_user_role_rel surr on surr.user_id = su.id
+                 left join sy_role sr on surr.role_id = sr.id
+            <where>
+                1=1
+                <if test="roleCode != null">
+                    and sr.role_code = #{roleCode}
+                </if>
+            </where>
+    </select>
+    <select id="drivers" resultType="wiki.zex.cloud.example.resp.SimpleDriverResp">
+        select su.id,
+               su.username,
+               su.mobile,
+               su.nickname,
+               su.avatar,
+               su.create_at,
+               fde.car_long,
+               fde.car_model
+        from sy_user su
+                 left join fo_driver_extension fde on su.id = fde.user_id
+        where  su.mobile = #{mobile}
     </select>
 
 </mapper>

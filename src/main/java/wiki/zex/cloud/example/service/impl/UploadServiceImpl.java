@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import wiki.zex.cloud.example.exception.ServerException;
 import wiki.zex.cloud.example.service.IUploadService;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -25,6 +27,8 @@ public class UploadServiceImpl implements IUploadService {
     public String hostUrl;
     @Override
     public String saveFile(String fileName, InputStream inputStream) {
+
+
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String format = sdf.format(new Date());
         String suffixName = StringUtils.isNotBlank(fileName)? fileName.substring(fileName.lastIndexOf(".")) : ".jpg";

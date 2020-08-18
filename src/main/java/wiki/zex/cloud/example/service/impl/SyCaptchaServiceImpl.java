@@ -10,10 +10,12 @@ import wiki.zex.cloud.example.constants.RedisKeys;
 import wiki.zex.cloud.example.entity.SyCaptcha;
 import wiki.zex.cloud.example.enums.CaptchaType;
 import wiki.zex.cloud.example.exception.ForbiddenException;
+import wiki.zex.cloud.example.exception.ParameterException;
 import wiki.zex.cloud.example.service.ISyCaptchaService;
 
 import java.time.LocalDateTime;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 
 @Slf4j
 @Service
@@ -24,6 +26,11 @@ public class SyCaptchaServiceImpl implements ISyCaptchaService {
 
     @Override
     public void send(String mobile, CaptchaType captchaType, Integer expireMinute) {
+        String pattern = "^((\\+|00)86)?((134\\d{4})|((13[0-3|5-9]|14[1|5-9]|15[0-9]|16[2|5|6|7]|17[0-8]|18[0-9]|19[0-2|5-9])\\d{8}))$";
+        boolean isMatch = Pattern.matches(pattern, mobile);
+        if (!isMatch) {
+            throw new ParameterException("请输入正确的手机号码");
+        }
         //过期时间 默认30分钟
         if (expireMinute == null || expireMinute <= 0) {
             expireMinute = 30;
@@ -38,7 +45,7 @@ public class SyCaptchaServiceImpl implements ISyCaptchaService {
         log.info("captcha code = {}", captchaCode);
 
         syCaptcha = new SyCaptcha(captchaCode, LocalDateTime.now().plusMinutes(1));
-        redisTemplate.opsForValue().set(RedisKeys.captchaCode(mobile, captchaType), captchaCode, expireMinute, TimeUnit.MINUTES);
+        redisTemplate.opsForValue().set(RedisKeys.captchaCode(mobile, captchaType), syCaptcha, expireMinute, TimeUnit.MINUTES);
         //初始化acsClient,暂不支持region化
 //        IClientProfile profile = DefaultProfile.getProfile("cn-hangzhou", accessKeyId, accessKeySecret);
 //        try {
