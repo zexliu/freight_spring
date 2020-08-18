@@ -40,6 +40,7 @@ public class SyUserController {
     @Autowired
     private ISyUserService iSyUserService;
 
+
     @GetMapping
     @ApiOperation("分页查询")
     IPage<SyUser> list(Pageable pageable, String username, String mobile, String realName, String workNo, Long deptId, Boolean enable, Boolean locked) {

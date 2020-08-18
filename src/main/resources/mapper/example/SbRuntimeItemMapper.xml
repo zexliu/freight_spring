@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="wiki.zex.cloud.example.mapper.SbRuntimeItemMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="wiki.zex.cloud.example.entity.SbRuntimeItem">
+        <id column="id" property="id"/>
+        <result column="table_id" property="tableId"/>
+        <result column="start_station_id" property="startStationId"/>
+        <result column="end_station_id" property="endStationId"/>
+        <result column="train_no" property="trainNo"/>
+        <result column="service_no" property="serviceNo"/>
+        <result column="description" property="description"/>
+        <result column="start_at" property="startAt"/>
+        <result column="end_at" property="endAt"/>
+        <result column="distance" property="distance"/>
+        <result column="create_at" property="createAt"/>
+        <result column="up" property="up"/>
+    </resultMap>
+    <select id="page" resultType="wiki.zex.cloud.example.resp.SbRuntimeItemResp">
+        select sri.id,
+        sri.table_id,
+        sri.start_station_id,
+        sri.end_station_id,
+        sri.train_no,
+        sri.service_no,
+        sri.description,
+        sri.start_at,
+        sri.end_at,
+        sri.distance,
+        sri.create_at,
+        sri.up,
+        sss.station_name start_station_name,
+        sse.station_name end_station_name
+        from sb_runtime_item sri
+        left join sb_station sss on sss.id = sri.start_station_id
+        left join sb_station sse on sse.id = sri.end_station_id
+        <where>
+            1=1
+            <if test="startStationId != null">
+                and sri.start_station_id = #{startStationId}
+            </if>
+            <if test="endStationId != null">
+                and sri.end_station_id = #{endStationId}
+            </if>
+            <if test="serviceNo != null">
+                and sri.service_no = #{serviceNo}
+            </if>
+            <if test="tableId != null">
+                and sri.table_id = #{tableId}
+            </if>
+            <if test="trainNo != null">
+                and sri.train_no = #{trainNo}
+            </if>
+            <if test="up != null">
+                and sri.up = #{up}
+            </if>
+        </where>
+        order by sri.id asc
+    </select>
+
+
+</mapper>

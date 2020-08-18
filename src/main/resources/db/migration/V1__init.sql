@@ -378,4 +378,5 @@ ALTER TABLE `fo_protocol` ADD CONSTRAINT `fk_fo_protocol_fo_order_1` FOREIGN KEY
 ALTER TABLE `refund_order` ADD CONSTRAINT `fk_refund_order_pay_order_1` FOREIGN KEY (`order_id`) REFERENCES `pay_order` (`id`);
 ALTER TABLE `pay_order` ADD CONSTRAINT `fk_pay_order_fo_order_1` FOREIGN KEY (`fo_order_id`) REFERENCES `fo_order` (`id`);
 ALTER TABLE `pay_order` ADD CONSTRAINT `fk_pay_order_fo_deliver_goods_1` FOREIGN KEY (`fo_delivery_id`) REFERENCES `fo_deliver_goods` (`id`);
+ALTER TABLE `fo_transaction` ADD CONSTRAINT `fk_fo_transaction_sy_user_1` FOREIGN KEY (`user_id`) REFERENCES `sy_user` (`id`);
 

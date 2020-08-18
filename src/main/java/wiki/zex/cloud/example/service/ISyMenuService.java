@@ -26,7 +26,7 @@ public interface ISyMenuService extends IService<SyMenu> {
 
     void delete(Long id);
 
-    List<SyMenuTree> tree(Authentication authentication);
+    List<SyMenuTree> tree(Authentication userId);
 
     List<SyMenu> getByRoleId(Long id);
 }
